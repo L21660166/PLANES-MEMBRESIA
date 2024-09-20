@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes de Precios</title>
+    <style>
+        /* Estilos para el cuerpo de la página */
+        body {
+            font-family: Arial, sans-serif; /* Fuente principal para el texto */
+            display: flex; /* Usamos flexbox para centrar el contenido */
+            flex-direction: column; /* Alineamos los elementos en una columna */
+            align-items: center; /* Centra los elementos horizontalmente */
+            background-image: url('https://p4.wallpaperbetter.com/wallpaper/786/21/283/geometric-shapes-dark-background-black-wallpaper-preview.jpg'); /* Imagen de fondo */
+            background-size: cover; /* Asegura que la imagen cubra toda el área del fondo */
+            background-attachment: fixed; /* Efecto parallax: el fondo se fija al fondo */
+            background-position: center; /* Centra la imagen de fondo */
+            position: relative; /* Necesario para posicionar elementos absolutamente dentro del cuerpo */
+            overflow: hidden; /* Oculta cualquier desbordamiento del contenido */
+        }
+
+        /* Filtro y superposición de color para el fondo */
+        body::before {
+            content: ''; /* No hay contenido textual, solo efectos visuales */
+            position: absolute; /* Posiciona el pseudo-elemento de manera absoluta */
+            top: 0; /* Coloca el elemento en la parte superior */
+            left: 0; /* Coloca el elemento en el lado izquierdo */
+            width: 100%; /* Ancho completo*/
+            height: 100%; /* Alto completo*/
+            background: rgba(0, 0, 0, 0.5); /* Superposición de color negro semitransparente */
+            filter: blur(8px); /* Desenfoque del fondo */
+            z-index: -1; /* Coloca el pseudo-elemento detrás del contenido */
+        }
+
+        /* Efecto de partículas animadas */
+        .particles {
+            position: absolute; /* Posiciona las partículas de manera absoluta */
+            top: 0; /* Coloca el contenedor de partículas en la parte superior */
+            left: 0; /* Coloca el contenedor de partículas en el lado izquierdo */
+            width: 100%; /* Ancho completo */
+            height: 150%; /* Alto completo  */
+            pointer-events: none; /* Asegura que el efecto no interfiera con los clics del usuario */
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 20%, transparent 20%, transparent 80%, rgba(255, 255, 255, 0.2) 80%); /* Fondo con efecto de partículas */
+            background-size: 10px 10px; /* Tamaño de las partículas */
+            animation: moveParticles 20s linear infinite; /* Animación de movimiento de partículas */
+        }
+
+        /* Animación para las partículas */
+        @keyframes moveParticles {
+            from { background-position: 0 0; } /* Posición inicial */
+            to { background-position: 300px 300px; } /* Posición final */
+        }
+
+        h1 {
+            font-size: 60px;
+            color: #e2e2e2; /* Color claro para que resalte */
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4); /* Efecto de sombra en el texto */
+        }
+
+        h2{
+            font-family: Arial, sans-serif;
+            font-size: 19px;
+            color: #e2e2e2;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 950px; /* Limita el ancho del párrafo */
+            line-height: 1.5;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Sombra suave para que se lea bien */
+        
+        }
+
+        p {
+            font-size: 18px;
+            color: #e2e2e2;
+            margin-bottom: 20px;
+            text-align: center;
+            max-width: 600px; /* Limita el ancho del párrafo */
+            line-height: 1.5;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Sombra suave para que se lea bien */
+        }
+
+        .container {
+            display: flex;
+            gap: 30px; /* Espacio entre las tarjetas */
+            justify-content: center;
+            flex-wrap: wrap; /* Las tarjetas se ajustan a varias filas si es necesario */
+        }
+
+        .card {
+            width: 250px;
+            height: 400px; /* Ajuste para agregar más información */
+            perspective: 1000px; /* Añade el efecto 3D */
+            position: relative;
+            transition: transform 0.6s, box-shadow 0.6s, border-color 0.6s; /* Transiciones suaves */
+            border: 2px solid transparent; /* Borde inicial invisible */
+            border-radius: 15px; /* Bordes redondeados */
+            margin: 10px; /* Espacio alrededor de cada tarjeta */
+        }
+
+        .card:hover {
+            border-color: #ffffff; /* Borde visible al pasar el ratón */
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s, box-shadow 0.6s; /* Transición para el giro */
+            transform-style: preserve-3d; /* Mantiene el efecto 3D al girar */
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* Sombra suave */
+            transform: scale(1); /* Escala inicial */
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg) scale(1.05); /* Rota y agranda al pasar el ratón */
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Oculta la cara opuesta al girar */
+            border-radius: 15px; /* Bordes redondeados */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-shadow: inset 0px 0px 8px rgba(0, 0, 0, 0.3); /* Sombra interna */
+            transition: color 0.3s, box-shadow 0.3s; /* Transiciones de color y sombra */
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #6d2280, #a928ff); /* Degradado en la parte frontal */
+        }
+
+        .card-back {
+            transform: rotateY(180deg); /* Rota la parte trasera para que quede oculta inicialmente */
+            background: linear-gradient(135deg, #880281, #3d014a); /* Degradado en la parte trasera */
+        }
+
+        .card-front h3, .card-back h3 {
+            font-size: 24px; /* Tamaño del título */
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Sombra para resaltar el texto */
+        }
+
+        .card-front p, .card-back p {
+            font-size: 16px; /* Tamaño del texto de los párrafos */
+        }
+
+        .card-front:hover, .card-back:hover {
+            color: #ffff00; /* Cambia el color del texto al pasar el ratón */
+            box-shadow: 0 4px 12px rgba(41, 40, 40, 0.4); /* Sombra adicional */
+        }
+
+        .reflection {
+            position: relative;
+        }
+
+        
+
+          /* Animación alrededor del borde de la página */
+          .border-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Permite que la animación no interfiera con el contenido */
+        }
+
+        .border-animation::before,
+        .border-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.8));
+            animation: moveHorizontal 20s linear infinite;
+        }
+
+        .border-animation::before {
+            top: 0;
+            left: 0;
+        }
+
+        .border-animation::after {
+            bottom: 0;
+            left: 0;
+            animation-direction: reverse;
+        }
+
+        .border-animation .vertical {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.8));
+            animation: moveVertical 20s linear infinite;
+        }
+
+        .border-animation .vertical.right {
+            right: 0;
+            left: auto;
+            animation-direction: reverse;
+        }
+
+        @keyframes moveHorizontal {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes moveVertical {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Animación de las líneas verticales */
+        @keyframes lineAnimation {
+            from { opacity: 0; } /* Opacidad inicial */
+            to { opacity: 1; } /* Opacidad final */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="particles"></div>
+
+    <h1>Nuestros Planes de Precios</h1>
+    <h2>Selecciona el plan que mejor se ajuste a tus necesidades. Desde opciones básicas hasta planes profesionales, tenemos todo cubierto para ti. Obtén acceso a contenido exclusivo y disfruta de nuestras mejores funciones.</h2>
+
+    <div class="container">
+        <!-- Tarjeta 1 -->
+        <div class="card">
+            <div class="card-inner reflection">
+                <div class="card-front">
+                    <h3>Básico</h3>
+                    <p>$9.99/mes</p>
+                    <p>Acceso limitado</p>
+                    <p>1 dispositivo<br>Calidad SD</p>
+                </div>
+                <div class="card-back">
+                    <h3>Beneficios:</h3>
+                    <p>Contenido limitado<br>1 usuario<br>Acceso a cualquier hora</p> 
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 2 -->
+        <div class="card">
+            <div class="card-inner reflection">
+                <div class="card-front">
+                    <h3>Estándar</h3>
+                    <p>$19.99/mes</p>
+                    <p>Acceso moderado</p>
+                    <p>2 dispositivos<br>Calidad HD</p> 
+                </div>
+                <div class="card-back">
+                    <h3>Beneficios:</h3>
+                    <p>Contenido premium<br>2 usuarios<br>Soporte técnico 24/7</p> 
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 3 -->
+        <div class="card">
+            <div class="card-inner reflection">
+                <div class="card-front">
+                    <h3>Premium</h3>
+                    <p>$29.99/mes</p>
+                    <p>Acceso ilimitado</p>
+                    <p>4 dispositivos<br>Calidad UHD</p>
+                </div>
+                <div class="card-back">
+                    <h3>Beneficios:</h3>
+                    <p>Contenido premium<br>4 usuarios<br>Descargas offline</p> 
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta 4 -->
+        <div class="card">
+            <div class="card-inner reflection">
+                <div class="card-front">
+                    <h3>Pro</h3>
+                    <p>$49.99/mes</p>
+                    <p>Acceso total</p>
+                    <p>6 dispositivos<br>Calidad 4K</p> 
+                </div>
+                <div class="card-back">
+                    <h3>Beneficios:</h3>
+                    <p>Contenido exclusivo<br>6 usuarios<br>Prioridad en lanzamientos</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+     <!-- Animación en todo el borde de la página -->
+     <div class="border-animation">
+        <div class="vertical"></div>
+        <div class="vertical right"></div>
+    </div>
+
+
+</body>
+</html>
